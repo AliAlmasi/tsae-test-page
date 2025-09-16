@@ -49,7 +49,7 @@ export default function App({ rows = 3, cols = 8 }) {
       >
         <thead>
           <tr>
-            <th>Questions &darr; / Answers &rarr;</th>
+            <th />
             {Array.from({ length: cols }).map((_, col) => (
               <th key={col}>{col + 1}</th>
             ))}
