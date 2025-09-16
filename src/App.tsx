@@ -4,6 +4,8 @@ import "./App.css";
 export default function App({ rows = 3, cols = 8 }) {
   const [selected, setSelected] = useState(Array(rows).fill(null));
 
+  const checkboxesIdPrefix = "SurveyQuestionID";
+
   useEffect(() => {
     setSelected((prev) => {
       if (prev.length === rows) return prev;
@@ -13,10 +15,10 @@ export default function App({ rows = 3, cols = 8 }) {
     });
   }, [rows]);
 
-  const handleToggle = (r: number, c: number) => {
+  const handleToggle = (row: number, col: number) => {
     setSelected((prev) => {
       const next = prev.slice();
-      next[r] = prev[r] === c ? null : c;
+      next[row] = prev[row] === col ? null : col;
       return next;
     });
   };
@@ -39,7 +41,6 @@ export default function App({ rows = 3, cols = 8 }) {
       </p>
 
       <table
-        border={1}
         style={{
           width: "40rem",
           margin: "0 auto",
@@ -48,26 +49,30 @@ export default function App({ rows = 3, cols = 8 }) {
       >
         <thead>
           <tr>
-            {Array.from({ length: cols }).map((_, c) => (
-              <th key={c}>{c + 1}</th>
+            <th>Questions &darr; / Answers &rarr;</th>
+            {Array.from({ length: cols }).map((_, col) => (
+              <th key={col}>{col + 1}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {Array.from({ length: rows }).map((_, r) => (
-            <tr key={r} id={`row${r + 1}`}>
-              {Array.from({ length: cols }).map((_, c) => (
-                <td key={c}>
-                  <input
-                    type="checkbox"
-                    id={`SurveyQuestionID_${r + 1}_${c + 1}`}
-                    name={`row${r + 1}-col${c + 1}`}
-                    checked={selected[r] === c}
-                    onChange={() => handleToggle(r, c)}
-                  />
-                </td>
-              ))}
-            </tr>
+          {Array.from({ length: rows }).map((_, row) => (
+            <>
+              <tr key={row} id={`row${row + 1}`}>
+                <td>Question {row + 1}</td>
+                {Array.from({ length: cols }).map((_, col) => (
+                  <td key={col}>
+                    <input
+                      type="checkbox"
+                      id={`${checkboxesIdPrefix}_${row + 1}_${col + 1}`}
+                      name={`row${row + 1}-col${col + 1}`}
+                      checked={selected[row] === col}
+                      onChange={() => handleToggle(row, col)}
+                    />
+                  </td>
+                ))}
+              </tr>
+            </>
           ))}
         </tbody>
       </table>
